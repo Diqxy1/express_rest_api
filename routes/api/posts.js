@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-
+const { celebrate, Joi, Segments } = require('celebrate');
 const PostController = require('../../controllers/PostController');
-// Posts Model
-const Posts = require('../../models/Post');
 
 // Routes Get api/posts
-// dec GET An post
-router.get('/:id', PostController.list)
+// desc GET An post
+router.get('/:id', celebrate({
+    [Segments.BODY]: {
+        id: Joi.string().required()
+    }
+}), PostController.list)
 
 // Routes GET api/posts
 // desc GET All posts
@@ -15,11 +17,21 @@ router.get('/', PostController.list_all);
 
 // Routes POST api/posts
 // desc Create An post
-router.post('/', PostController.create);
+router.post('/', celebrate({
+    [Segments.BODY]: {
+        title: Joi.string().required(),
+        body: Joi.string().required()
+    }
+}), PostController.create);
 
 // Routes PUT api/posts
 // desc Update An post
-router.put('/:id', PostController.update);
+router.put('/:id', celebrate({
+    [Segments.BODY]: {
+        title: Joi.string().required(),
+        body: Joi.string().required()
+    }
+}), PostController.update);
 
 // Routes DELETE api/posts/:id
 // desc delete An post
